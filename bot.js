@@ -33,10 +33,14 @@ class EchoBot {
             // read from state.
             let count = await this.countProperty.get(turnContext);
             count = count === undefined ? 1 : ++count;
-            await turnContext.sendActivity(`${ count }: You said "${ turnContext.activity.text }"`);
+            if (turnContext.activity.text === "this is Chuck") {
+              await turnContext.sendActivity(`${ count }: Hello Chuck`);
+            } else {
+              await turnContext.sendActivity(`${ count }: You said "${ turnContext.activity.text }"`);              
+            }
             // increment and set turn counter.
             await this.countProperty.set(turnContext, count);
-        } else { 
+        } else {
             // Generic handler for all other activity types.
             await turnContext.sendActivity(`[${ turnContext.activity.type } event detected]`);
         }
