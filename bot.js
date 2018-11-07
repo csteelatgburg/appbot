@@ -4,7 +4,7 @@
 // bot.js is your bot's main entry point to handle incoming activities.
 
 const { ActivityTypes } = require('botbuilder');
-
+var Request = require("request");
 // Turn counter property
 const TURN_COUNTER_PROPERTY = 'turnCounterProperty';
 
@@ -36,7 +36,13 @@ class EchoBot {
             if (turnContext.activity.text === "this is Chuck") {
               await turnContext.sendActivity(`${ count }: Hello Chuck`);
             } else {
-              await turnContext.sendActivity(`${ count }: You said "${ turnContext.activity.text }"`);              
+              Request.get("https://prod-68.westus.logic.azure.com:443/workflows/a52e1e8499364c8698f63a3f6f064dd2/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=9DlhgST9G6bfT9MxEwbnYiaRK_vu7CdGVesEBZT0e4o", (error, res, body) => {
+                  if(error) {
+                      return await turnContext.sendActivity('Something bad happened');
+                  }
+                  await turnContext.sendActivity(body);
+
+              });
             }
             // increment and set turn counter.
             await this.countProperty.set(turnContext, count);
