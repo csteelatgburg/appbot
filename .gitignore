@@ -62,3 +62,4 @@ typings/
 
 PostDeployScripts/
 deploymentScripts/
+package-lock.json
